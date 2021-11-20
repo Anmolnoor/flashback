@@ -12,6 +12,6 @@ router.get("/:id", Controller.getPost);
 router.post("/", Middleware.Auth, Controller.createPost);
 router.patch("/:id", Middleware.Auth, Controller.updatePost);
 router.delete("/:id", Middleware.Auth, Controller.deletePost);
-router.patch("/:id/likePost", Middleware.Auth, Controller.likePost);
+router.patch("/likePost/:id", Middleware.Auth, Controller.likePost);
 
 export default router;

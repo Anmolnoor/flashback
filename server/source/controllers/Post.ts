@@ -22,7 +22,7 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
 		const totle = await PostMessage.countDocuments({});
 
 		const posts = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
-		logging.info(NAMESPACE, `Totle number of posts:${totle} and startIndex:${startIndex}`, posts);
+		logging.info(NAMESPACE, `Totle number of posts:${totle} and startIndex:${startIndex}`);
 		res.status(200).json({ data: posts, currentPage: Number(page), numberofPages: Math.ceil(totle / LIMIT) });
 	} catch (error) {
 		logging.error(NAMESPACE, "Error in getPosts", error);
@@ -30,26 +30,24 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
 	}
 };
 // get post by searchQuery and tags
-export const getPostBySearch = async (req: Request, res: Response, next: NextFunction) => {
-	logging.info(NAMESPACE, "Get Posts by Search Query route called");
-	const { searchQuery, tags, page } = req.query;
-	try {
-		const LIMIT = 8;
-		const startIndex = (Number(page) - 1) * LIMIT;
-		const totle = await PostMessage.countDocuments().where("title").equals(searchQuery).where("tags").equals(tags);
 
-		const posts = await PostMessage.find()
-			.where("title")
-			.equals(searchQuery)
-			.where("tags")
-			.equals(tags)
-			.sort({ _id: -1 })
-			.limit(LIMIT)
-			.skip(startIndex);
-		logging.info(NAMESPACE, `Totle number of posts:${totle} and startIndex:${startIndex}`, posts);
-		res.status(200).json({ data: posts, currentPage: Number(page), numberofPages: Math.ceil(totle / LIMIT) });
+export const getPostBySearch = async (req: Request, res: Response, next: NextFunction) => {
+	logging.info(NAMESPACE, "Get Post By Search route called");
+
+	const { searchQuery, tags } = req.query;
+	try {
+		if (searchQuery && tags) {
+			const title = new RegExp(searchQuery, "i");
+
+			const posts = await PostMessage.find({ $or: [{ title }, { tags: { $in: tags.split(",") } }] });
+			logging.info(NAMESPACE, `Totle number of posts : ${posts.length}`);
+			res.status(200).json({ data: posts });
+		} else {
+			logging.error(NAMESPACE, "Error in getPostBySearch");
+			res.status(404).json({ message: "Post Not Found" });
+		}
 	} catch (error) {
-		logging.error(NAMESPACE, "Error in getPosts", error);
+		logging.error(NAMESPACE, "Error in getPostBySearch", error);
 		res.status(404).json({ message: "Post Not Found" });
 	}
 };
@@ -60,7 +58,7 @@ export const getPost = async (req: Request, res: Response) => {
 	logging.info(NAMESPACE, `Post ID :${id}`, id);
 	try {
 		const post = await PostMessage.findById(id);
-		logging.info(NAMESPACE, "Post Found", post);
+		logging.info(NAMESPACE, `Post Found with ID:${id}`);
 		res.status(200).json(post);
 	} catch (error) {
 		logging.error(NAMESPACE, "Error in getPost", error);
@@ -71,11 +69,11 @@ export const getPost = async (req: Request, res: Response) => {
 export const createPost = async (req: Request, res: Response) => {
 	logging.info(NAMESPACE, "Create Post route called");
 	const post = req.body;
-	logging.info(NAMESPACE, "Post to be created", post);
+	logging.info(NAMESPACE, "Post to be created", req.body.title);
 	const newPostMessage = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() });
 	try {
 		await newPostMessage.save();
-		logging.info(NAMESPACE, "Post Created", newPostMessage);
+		logging.info(NAMESPACE, "Post Created");
 		res.status(201).json(newPostMessage);
 	} catch (error) {
 		logging.error(NAMESPACE, "Error in createPost", error);
@@ -86,7 +84,7 @@ export const createPost = async (req: Request, res: Response) => {
 export const updatePost = async (req: Request, res: Response) => {
 	logging.info(NAMESPACE, "Update Post route called");
 	const { id } = req.params;
-	logging.info(NAMESPACE, `Post ID:${id}`, id);
+	logging.info(NAMESPACE, `Post ID:${id}`);
 
 	const { title, message, creator, selectedFile, tags } = req.body;
 
@@ -95,10 +93,9 @@ export const updatePost = async (req: Request, res: Response) => {
 		return res.status(404).send(`No post with id: ${id}`);
 	}
 
-	const updatedPost = { creator, title, message, tags, selectedFile, _id: id };
-
+	const updatedPost = { creator, title, message, tags, selectedFile, updatedAt: new Date().toISOString() };
 	await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
-	logging.info(NAMESPACE, "Post Updated", updatedPost);
+	logging.info(NAMESPACE, `Post Updated with ID:${id}`);
 	res.json(updatedPost);
 };
 
@@ -106,7 +103,7 @@ export const deletePost = async (req: Request, res: Response) => {
 	logging.info(NAMESPACE, "Delete Post route called");
 	const { id } = req.params;
 	const userId = req.userId;
-	logging.warn(NAMESPACE, `Post ID:${id}`, id);
+	logging.warn(NAMESPACE, `Post ID:${id}`);
 
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		logging.error(NAMESPACE, "Invalid ID", id);
@@ -118,69 +115,34 @@ export const deletePost = async (req: Request, res: Response) => {
 	res.json({ message: "Post deleted successfully." });
 };
 
-// export const likePost = async (req: CustomRequest, res: Response) => {
-// 	logging.info(NAMESPACE, "Like Post route called");
-// 	const { id } = req.params;
-// 	const userId = req?.userId;
-// 	logging.info(NAMESPACE, `Post ID:${id} User ID:${userId}`, { id, userId });
-// 	if (!userId) {
-// 		logging.error(NAMESPACE, "User ID not found", userId);
-// 		return res.json({ message: "Unauthenticated" });
-// 	}
-
-// 	if (!mongoose.Types.ObjectId.isValid(id)) {
-// 		logging.error(NAMESPACE, "Invalid ID", id);
-// 		return res.status(404).send(`No post with id: ${id}`);
-// 	}
-
-// 	const post = await PostMessage.findById(id);
-// 	logging.info(NAMESPACE, "Post Found", post);
-// 	const index = post.likes.findIndex((id) => id === String(userId));
-
-// 	if (index === -1) {
-// 		post.likes.push(userId);
-// 	} else {
-// 		post.likes = post.likes.filter((id) => id !== String(userId));
-// 	}
-// 	const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
-// 	res.status(200).json(updatedPost);
-// };
-
-// like posts by user id and post id and return the updated post object with likes array updated by user id
 export const likePost = async (req: Request, res: Response) => {
 	logging.info(NAMESPACE, "Like Post route called");
 	const { id } = req.params;
 	const userId = req.userId;
-	logging.info(NAMESPACE, `Post ID:${id} User ID:${userId}`, { id, userId });
-	if (!userId) {
-		logging.error(NAMESPACE, "User ID not found", userId);
-		return res.json({ message: "Unauthenticated" });
-	}
+	logging.info(NAMESPACE, `Post ID:${id} UserID:${userId}`);
 
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		logging.error(NAMESPACE, "Invalid ID", id);
 		return res.status(404).send(`No post with id: ${id}`);
 	}
 
-	const post = await PostMessage.findById(id);
-	logging.info(NAMESPACE, "Post Found", post);
-	const index = post?.likes!;
+	try {
+		const post = await PostMessage.findById(id);
+		logging.info(NAMESPACE, `Post Found with the id ${id}`);
+		const index = post!.likes.findIndex((id) => id === userId);
 
-	if (!isValidObjectId(userId)) {
-		logging.error(NAMESPACE, "Invalid ID", userId);
-		return res.status(404).send(`Invalid userID: ${id}`);
-	} else {
-		if (index?.includes(userId)) {
-			logging.info(NAMESPACE, "User already liked the post hence Dislike");
-			post?.likes?.splice(post?.likes?.indexOf(userId), 1);
-		} else {
-			logging.info(NAMESPACE, "User liked the post");
-			post?.likes.push(userId);
+		if (index === -1) {
+			logging.info(NAMESPACE, "User like the post");
+			post!.likes.push(userId);
 		}
-	}
 
-	const updatedPost = await PostMessage.findByIdAndUpdate(id, { post }, { new: true });
-	res.status(200).json(updatedPost);
+		const updatedPost = await PostMessage.findByIdAndUpdate(id, post!, { new: true });
+		logging.info(NAMESPACE, "Post Updated");
+		res.status(200).json(updatedPost);
+	} catch (error) {
+		logging.error(NAMESPACE, "Error in likePost", error);
+		res.status(404).json({ message: "Post Not Found" });
+	}
 };
 
 export default { postController, getPosts, getPost, createPost, updatePost, deletePost, likePost, getPostBySearch };

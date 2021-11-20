@@ -15,15 +15,15 @@ router.use((req, res, next) => {
 	res.on("finish", () => {
 		logging.info(
 			NAMESPACE,
-			`METHOD - [${req.method}] URL - [${req.url}] IP - [${req.socket.remoteAddress}] STATUS - [${req.statusCode}]`
+			`METHOD - [${req.method}] URL - [${req.url}] IP - [${req.socket.remoteAddress}] STATUS - [${res.statusCode}]  STATUS MESSAGE - ${res.statusMessage}`
 		);
 	});
 	next();
 });
 
 /** Parse the request */
-router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
+router.use(express.json({ limit: "30mb" }));
+router.use(express.urlencoded({ limit: "30mb", extended: true, parameterLimit: 50000 }));
 router.use(cors());
 
 /** Rule of our API */
