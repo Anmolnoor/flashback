@@ -1,0 +1,58 @@
+Arguments: 
+  /home/anmol/.nvm/versions/node/v16.13.0/bin/node /home/anmol/.nvm/versions/node/v16.13.0/bin/yarn add -D @types/react-file-base64
+
+PATH: 
+  /home/anmol/.nvm/versions/node/v16.13.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  16.13.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@types%2freact-file-base64: Not found
+      at Request.params.callback [as _callback] (/home/anmol/.nvm/versions/node/v16.13.0/lib/node_modules/yarn/lib/cli.js:67029:18)
+      at Request.self.callback (/home/anmol/.nvm/versions/node/v16.13.0/lib/node_modules/yarn/lib/cli.js:140883:22)
+      at Request.emit (node:events:390:28)
+      at Request.<anonymous> (/home/anmol/.nvm/versions/node/v16.13.0/lib/node_modules/yarn/lib/cli.js:141855:10)
+      at Request.emit (node:events:390:28)
+      at IncomingMessage.<anonymous> (/home/anmol/.nvm/versions/node/v16.13.0/lib/node_modules/yarn/lib/cli.js:141777:12)
+      at Object.onceWrapper (node:events:509:28)
+      at IncomingMessage.emit (node:events:402:35)
+      at endReadableNT (node:internal/streams/readable:1343:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  {
+  	"name": "flashback",
+  	"version": "1.0.0",
+  	"description": "This is a **Online Platform to share your memories** which is build on `Reactjs` conjugated with `Typescript` as well as `Nodejs` based API for the **flashback** backend.",
+  	"main": "index.js",
+  	"scripts": {
+  		"test": "echo \"Error: no test specified\" && exit 1",
+  		"server": "yarn --cwd server ts-node-dev --respawn --transpile-only source/Server.ts",
+  		"client": "yarn --cwd client start",
+  		"dev": "concurrently \"yarn server\" \"yarn client\""
+  	},
+  	"repository": {
+  		"type": "git",
+  		"url": "git+https://github.com/Anmolnoor/flashback.git"
+  	},
+  	"keywords": [],
+  	"author": "",
+  	"license": "ISC",
+  	"bugs": {
+  		"url": "https://github.com/Anmolnoor/flashback/issues"
+  	},
+  	"homepage": "https://github.com/Anmolnoor/flashback#readme"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

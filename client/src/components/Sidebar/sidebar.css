@@ -1,0 +1,157 @@
+.sidebar--container {
+	width: 400px;
+	display: flex;
+	gap: 30px;
+	flex-direction: column;
+}
+
+.sidebar--post--area {
+	box-shadow: 2px 2px 20px 0px #aaa;
+	padding: 5% 0;
+	width: 100%;
+}
+
+.sidebar--form--title {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.sidebar--form--title-text {
+	font-size: 2rem;
+	margin-left: 20px;
+	font-weight: bold;
+	color: #333;
+}
+
+.sidebar--form--input {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.form-input {
+	position: relative;
+	width: 350px;
+	height: 55px;
+	padding: 5px;
+	margin-top: 20px;
+	margin-bottom: 14px;
+}
+.form-input > label {
+	position: absolute;
+	margin-top: -14px;
+	top: 0;
+	padding: 0 5px;
+	left: 15px;
+	width: fit-content;
+	z-index: 1;
+	font-size: 1.2rem;
+	color: #444;
+	background-color: #fff;
+	transition: all 0.3s ease;
+}
+
+.form-input > input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	padding-left: 15px;
+	height: 100%;
+	border: none;
+	background: none;
+	border: #333 solid 1px;
+	border-radius: 5px;
+	outline: none;
+	font-size: 1.5rem;
+	color: #333;
+}
+/* 
+.form-input-message {
+	height: 150px;
+} */
+
+.form-input > input[type="file"]::-webkit-file-upload-button {
+	margin-left: -4%;
+	margin-top: 5px;
+	width: 0%;
+	height: 55px;
+	padding: 0.5rem;
+	border-radius: 5px;
+	font-size: 1rem;
+	color: #fff;
+	background-color: #fff;
+	border: #fff solid 2px;
+	transition: all 0.3s ease-in-out;
+
+	content: "Upload";
+}
+
+.form-submit {
+	cursor: pointer;
+	position: relative;
+	width: 350px;
+	height: 40px;
+	padding: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: solid 1px #333;
+	border-radius: 5px;
+}
+
+.form-submit > p {
+	font-size: 1.3rem;
+	font-weight: semi-bold;
+	color: #333;
+}
+
+.form--signin--signup {
+	cursor: pointer;
+}
+
+/* sidebar--pagenation */
+
+.sidebar--pagenation {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	width: 80%;
+	margin: 0 auto;
+}
+
+.sidebar--pagenation--text {
+	font-size: 1.2rem;
+	color: #333;
+	cursor: pointer;
+}
+
+.sidebar--pagenation--text--neg::before {
+	content: "...";
+	position: absolute;
+	left: -30px;
+	top: -19px;
+	font-size: 2rem;
+}
+
+.sidebar--pagenation--text--neg {
+	position: relative;
+	margin-left: 35px;
+}
+
+.sidebar--pagenation--text--peg::before {
+	content: "...";
+	position: absolute;
+	left: 40px;
+	top: -19px;
+	font-size: 2rem;
+}
+
+.sidebar--pagenation--text--peg {
+	position: relative;
+	margin-right: 35px;
+}

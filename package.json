@@ -1,0 +1,23 @@
+{
+	"name": "flashback",
+	"version": "1.0.0",
+	"description": "This is a **Online Platform to share your memories** which is build on `Reactjs` conjugated with `Typescript` as well as `Nodejs` based API for the **flashback** backend.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"server": "yarn --cwd server ts-node-dev --respawn --transpile-only source/Server.ts",
+		"client": "yarn --cwd client start",
+		"dev": "concurrently \"yarn server\" \"yarn client\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Anmolnoor/flashback.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Anmolnoor/flashback/issues"
+	},
+	"homepage": "https://github.com/Anmolnoor/flashback#readme"
+}
