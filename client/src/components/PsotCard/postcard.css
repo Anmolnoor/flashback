@@ -1,7 +1,7 @@
 .postcard-container {
 	margin: 2% 1%;
 	width: 384px;
-	height: 410px;
+	/* height: 435px; */
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -9,6 +9,9 @@
 	border-radius: 10px;
 	overflow: hidden;
 	box-shadow: 4px 6px 10px 0px #aaa;
+	text-decoration: none;
+}
+.postcard--link {
 	text-decoration: none;
 }
 .postcard-header {
@@ -51,6 +54,7 @@
 	color: #fff;
 }
 .postcard--options {
+	cursor: pointer;
 	position: absolute;
 	top: 10px;
 	right: 10px;
@@ -67,7 +71,7 @@
 	justify-content: space-between;
 	gap: 10px;
 	width: 100%;
-	height: 200px;
+	/* height: 200px; */
 	padding: 5%;
 }
 
@@ -76,6 +80,11 @@
 	width: 100%;
 	font-weight: 500;
 	color: #444;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-content: center;
 }
 .postcard--title {
 	margin: 1.5% 0;
@@ -102,4 +111,23 @@
 	font-size: 1.1rem;
 	font-weight: 400;
 	color: #222;
+	cursor: pointer;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.postcard--info--like {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	font-size: 1.1rem;
+}
+
+.postard--btn--delete {
+	z-index: 10;
 }

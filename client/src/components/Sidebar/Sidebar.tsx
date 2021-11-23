@@ -1,23 +1,49 @@
 import React, { FC, useState } from "react";
 import FileBase from "react-file-base64";
-import { FaFileAlt, FaFolderPlus } from "react-icons/fa";
+import { FaFolderPlus } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { CreatePost, FetchPosts, SearchPost } from "../../Features/post";
+import { RootState } from "../../Store/store";
 import "./sidebar.css";
 
-interface SidebarProps {
-	isAuthenticated: boolean;
+interface postdata {
+	title: string;
+	message: string;
+	tags: string[];
+	selectedFile: string;
+	creator: string;
+}
+interface siderbarProps {
+	postdata: postdata;
+	setPostdata: React.Dispatch<React.SetStateAction<postdata>>;
 }
 
-const Sidebar: FC<SidebarProps> = ({ isAuthenticated }) => {
+const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
+	const dispatch = useDispatch();
+	const state = useSelector((state: RootState) => state.auth);
+	const pageState = useSelector((state: RootState) => state.post);
 	const [search, setSearch] = useState({
 		search: "",
 		tags: ""
 	});
-	const [post, setPost] = useState({
-		title: "",
-		message: "",
-		tags: "",
-		file: ""
-	});
+
+	const user = localStorage.getItem("name");
+
+	const searchHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		dispatch(SearchPost(search));
+	};
+
+	const postHandler = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		// console.log(postdata);
+		dispatch(CreatePost(postdata));
+	};
+
+	const pageHandler1 = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		dispatch(FetchPosts({ page: 1 }));
+	};
+	const pageHandler2 = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+		dispatch(FetchPosts({ page: 2 }));
+	};
 
 	return (
 		<div className='sidebar--container '>
@@ -41,18 +67,13 @@ const Sidebar: FC<SidebarProps> = ({ isAuthenticated }) => {
 							onChange={(e) => setSearch({ ...search, tags: e.target.value })}
 						/>
 					</div>
-					<div
-						className='form-submit'
-						onClick={(e) => {
-							e.preventDefault();
-							console.log({ search });
-						}}>
+					<div className='form-submit' onClick={searchHandler}>
 						<p>Search</p>
 					</div>
 				</div>
 			</div>
 			<div className='sidebar--post--area'>
-				{isAuthenticated ? (
+				{state.isAuthenticated ? (
 					<div className='sidebar--post--from'>
 						<div className='sidebar--form--title'>
 							<FaFolderPlus size={25} />
@@ -64,8 +85,10 @@ const Sidebar: FC<SidebarProps> = ({ isAuthenticated }) => {
 								<input
 									type='text'
 									id='title'
-									value={post.title}
-									onChange={(e) => setPost({ ...post, title: e.target.value })}
+									value={postdata.title}
+									onChange={(e) =>
+										setPostdata({ ...postdata, title: e.target.value, creator: String(user) })
+									}
 								/>
 							</div>
 							<div className='form-input form-input-message '>
@@ -73,8 +96,8 @@ const Sidebar: FC<SidebarProps> = ({ isAuthenticated }) => {
 								<input
 									type='text'
 									id='message'
-									value={post.message}
-									onChange={(e) => setPost({ ...post, message: e.target.value })}
+									value={postdata.message}
+									onChange={(e) => setPostdata({ ...postdata, message: e.target.value })}
 								/>
 							</div>
 							<div className='form-input'>
@@ -82,8 +105,8 @@ const Sidebar: FC<SidebarProps> = ({ isAuthenticated }) => {
 								<input
 									type='text'
 									id='tags'
-									value={post.tags}
-									onChange={(e) => setPost({ ...post, tags: e.target.value })}
+									value={postdata.tags}
+									onChange={(e) => setPostdata({ ...postdata, tags: e.target.value.split(",") })}
 								/>
 							</div>
 							<div className='form-input'>
@@ -93,16 +116,11 @@ const Sidebar: FC<SidebarProps> = ({ isAuthenticated }) => {
 									type='file'
 									multiple={false}
 									onDone={({ base64 }: { base64: string }): void =>
-										setPost({ ...post, file: base64 })
+										setPostdata({ ...postdata, selectedFile: base64 })
 									}
 								/>
 							</div>
-							<div
-								className='form-submit'
-								onClick={(e) => {
-									e.preventDefault();
-									console.log(post);
-								}}>
+							<div className='form-submit' onClick={postHandler}>
 								<p>Submit</p>
 							</div>
 						</div>
@@ -116,20 +134,23 @@ const Sidebar: FC<SidebarProps> = ({ isAuthenticated }) => {
 			<div className='sideabar--pagenations sidebar--post--area'>
 				<div className='sidebar--pagenation'>
 					<div className='sidebar--pagenation--text'>
-						<p>1</p>
+						<p onClick={pageHandler1}>1</p>
 					</div>
-					<div className='sidebar--pagenation--text sidebar--pagenation--text--neg'>
-						<p>n-1</p>
-					</div>
-					<div className='sidebar--pagenation--text'>
-						<p>n</p>
-					</div>
-					<div className='sidebar--pagenation--text sidebar--pagenation--text--peg'>
-						<p>n+1</p>
-					</div>
-					<div className='sidebar--pagenation--text'>
-						<p>T</p>
-					</div>
+					{
+						pageState.posts.numberofPages > 1 ? (
+							<div className='sidebar--pagenation--text'>
+								<p onClick={pageHandler2}>2</p>
+							</div>
+						) : null
+						// <>
+						// 	<div className='sidebar--pagenation--text'>
+						// 		<p onClick={pageHandler}>2</p>
+						// 	</div>
+						// 	<div className='sidebar--pagenation--text'>
+						// 		<p onClick={pageHandler}>3</p>
+						// 	</div>
+						// </>
+					}
 				</div>
 			</div>
 		</div>

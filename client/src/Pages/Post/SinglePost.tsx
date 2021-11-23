@@ -8,7 +8,7 @@ import "./singlepost.css";
 
 // image imports
 import Image from "../../images/bg.jpg";
-import Postcard from "../../components/PsotCard/Postcard";
+// import Postcard from "../../components/PsotCard/Postcard";
 // interface SinglePostProps {
 // 	isAuthenticated: boolean;
 // }
@@ -37,17 +37,7 @@ const SinglePost: FC = () => {
 				</div>
 			</div>
 			<div className='related--posts--title'>Related Posts</div>
-			<div className='post--related-posts'>
-				<Postcard />
-				<Postcard />
-				<Postcard />
-				<Postcard />
-				<Postcard />
-				<Postcard />
-				<Postcard />
-				<Postcard />
-				<Postcard />
-			</div>
+			<div className='post--related-posts'>{/* <Postcard /> */}</div>
 		</div>
 	);
 };

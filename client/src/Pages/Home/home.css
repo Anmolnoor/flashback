@@ -4,18 +4,41 @@
 	flex-direction: row;
 	align-items: flex-start;
 	justify-content: space-between;
+	gap: 10px;
 }
-
-.home--sidebar {
-	margin: 1.5%;
+.home--postcards {
+	width: 100%;
 }
-
 .home--content {
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
 	justify-content: flex-start;
 	flex-wrap: wrap;
-	margin: 0 auto;
+	gap: 10px;
 	width: 90%;
+	margin: 0 auto;
 }
+
+.home--content > p {
+	margin: 7%;
+	font-size: 3rem;
+	text-align: center;
+	font-weight: 500;
+}
+
+/* .home--sidebar {
+	width: 400px;
+	margin: 1.5%;
+} */
+
+/* .home--content {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	margin: 0 auto;
+	width: 80%;
+	gap: 15px;
+} */

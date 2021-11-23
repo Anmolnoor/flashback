@@ -9,7 +9,7 @@ import SinglePost from "../Pages/Post/SinglePost";
 // Components imports
 
 const MainRoutes = () => {
-	const [isAuthenticated, setisAuthenticated] = useState(true);
+	const [isAuthenticated, setisAuthenticated] = useState(false);
 	const Err = () => {
 		// const preams = useParams();
 		// console.log("====================================");
@@ -29,13 +29,14 @@ const MainRoutes = () => {
 			<Routes>
 				<Route path='/' element={<Navigate replace to='/posts' />} />
 				<Route path='/posts' element={<Outlet />}>
-					<Route path='' element={<Home isAuthenticated={isAuthenticated} />} />
+					<Route path='' element={<Home />} />
 				</Route>
 				<Route path='/post' element={<Outlet />}>
+					<Route path='' element={<Navigate replace to='/' />} />
 					<Route path=':id' element={<SinglePost />} />
 				</Route>
 
-				<Route path='auth' element={isAuthenticated ? <Auth /> : <Navigate replace to='/posts' />} />
+				<Route path='auth' element={isAuthenticated ? <Navigate replace to='/posts' /> : <Auth />} />
 				<Route path='logout' element={<Navigate replace to='/' />} />
 				<Route path='*' element={<Err />} />
 			</Routes>

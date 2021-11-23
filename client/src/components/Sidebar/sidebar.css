@@ -10,6 +10,11 @@
 	padding: 5% 0;
 	width: 100%;
 }
+.sidebar--login--notification {
+	padding: 5%;
+	text-align: center;
+	font-size: 1.5em;
+}
 
 .sidebar--form--title {
 	display: flex;
