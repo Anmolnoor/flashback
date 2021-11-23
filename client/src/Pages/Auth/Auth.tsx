@@ -6,7 +6,7 @@ import { RootState } from "../../Store/store";
 //  components imports
 import Login from "./Login";
 import Register from "./Register";
-
+import Loader from "../../components/Loader/Loader";
 // import actions from reduxtoolkit
 import { loginUser, registerUser } from "../../Features/auth";
 
@@ -18,7 +18,7 @@ const Auth: FC = () => {
 	const [singInB, setSingIn] = useState(true);
 	const navigate = useNavigate();
 	// const [isAuth, setIsAuth] = useState(false);
-	const state = useSelector((state: RootState) => state.auth);
+	const authState = useSelector((state: RootState) => state.auth.isAuthenticated);
 	const [FormData, setFormData] = useState({
 		email: "",
 		password: ""
@@ -38,38 +38,47 @@ const Auth: FC = () => {
 	};
 
 	useEffect(() => {
-		if (state?.isAuthenticated) {
+		if (authState) {
 			navigate("/");
 		}
-	}, [state?.isAuthenticated]);
+	}, [authState]);
 
-	console.log(state.isAuthenticated);
+	console.log(authState);
+	const stateloading = useSelector((state: RootState) => state.auth.loading);
 
 	return (
 		<div className='auth--container'>
-			<div className='auth--form'>
-				<div className='auth--title'>
-					<FaSignInAlt className='auth--icon' size='40' />
-					<h1>{singInB ? "Sing in" : "Sing up"}</h1>
+			{stateloading ? (
+				<div className='test'>
+					<div className='Loader--Auth'>
+						<Loader />
+					</div>
 				</div>
-				<form>
-					<div className='auth--form-group'>
-						{singInB ? (
-							<Login FormData={FormData} setFormData={setFormData} />
-						) : (
-							<Register FormDataS={FormDataS} setFormDataS={setFormDataS} />
-						)}
-						<div className='auth-submit' onClick={submitHandler}>
-							<p>{singInB ? "Sing in" : "Sing up"}</p>
+			) : (
+				<div className='auth--form'>
+					<div className='auth--title'>
+						<FaSignInAlt className='auth--icon' size='40' />
+						<h1>{singInB ? "Sing in" : "Sing up"}</h1>
+					</div>
+					<form>
+						<div className='auth--form-group'>
+							{singInB ? (
+								<Login FormData={FormData} setFormData={setFormData} />
+							) : (
+								<Register FormDataS={FormDataS} setFormDataS={setFormDataS} />
+							)}
+							<div className='auth-submit' onClick={submitHandler}>
+								<p>{singInB ? "Sing in" : "Sing up"}</p>
+							</div>
+						</div>
+					</form>
+					<div className='auth--signin--signup'>
+						<div onClick={() => setSingIn(!singInB)}>
+							{singInB ? "Don't Have Account Yet!!!" : "Already Have Account!!! "}
 						</div>
 					</div>
-				</form>
-				<div className='auth--signin--signup'>
-					<div onClick={() => setSingIn(!singInB)}>
-						{singInB ? "Don't Have Account Yet!!!" : "Already Have Account!!! "}
-					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 	// }

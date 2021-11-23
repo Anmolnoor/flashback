@@ -1,11 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// interface user {
-// 	_id: string;
-// 	name: string;
-// }
-
 interface post {
 	_id: string;
 	title: string;
@@ -85,6 +80,7 @@ export const authSlice = createSlice({
 			state.isAuthenticated = false;
 			state.user = null;
 			state.token = null;
+			state.loading = false;
 		}
 	},
 	extraReducers: {

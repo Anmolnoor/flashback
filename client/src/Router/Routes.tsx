@@ -11,10 +11,6 @@ import SinglePost from "../Pages/Post/SinglePost";
 const MainRoutes = () => {
 	const [isAuthenticated, setisAuthenticated] = useState(false);
 	const Err = () => {
-		// const preams = useParams();
-		// console.log("====================================");
-		// console.log(preams);
-		// console.log("====================================");
 		return (
 			<div>
 				<h1>Error 404</h1>

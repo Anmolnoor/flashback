@@ -1,9 +1,8 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { NavLink } from "react-router-dom";
 
 // Logo
 import Logo from "../../images/logo.svg";
-import Image from "../../images/bg.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../Store/store";
 // css imports
@@ -32,16 +31,7 @@ const Navbar: FC<NavbarProps> = () => {
 				<div className='navbar-links'>
 					{auth.isAuthenticated ? (
 						<div className='navbar--profile--btn'>
-							<div className='navbar--profile'>
-								{auth.user?.name.charAt(0)}
-								{/* <img
-									src={Image}
-									alt='profile-user'
-									style={{ borderRadius: "50px" }}
-									height='60px'
-									width='60px'
-								/> */}
-							</div>
+							<div className='navbar--profile'>{auth.user?.name.charAt(0)}</div>
 							<div className='navbar--profile--name'>{auth.user?.name}</div>
 							<div className='navbar--btn'>
 								<NavLink to='/logout' onClick={logoutHandler} className='signin--btn '>

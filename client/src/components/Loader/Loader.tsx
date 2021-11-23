@@ -5,11 +5,11 @@ export default class App extends React.Component {
 	render() {
 		return (
 			<Loader
-				type='Puff'
-				color='#00BFFF'
-				height={100}
-				width={100}
-				timeout={3000} //3 secs
+				type='BallTriangle'
+				color='#444'
+				height={300}
+				width={300}
+				// timeout={3000} //3 secs
 			/>
 		);
 	}
