@@ -70,7 +70,7 @@ export const createPost = async (req: Request, res: Response) => {
 	logging.info(NAMESPACE, "Create Post route called");
 	const post = req.body;
 	logging.info(NAMESPACE, "Post to be created", req.body.title);
-	const newPostMessage = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() });
+	const newPostMessage = new PostMessage({ ...post, createdAt: new Date().toISOString() });
 	try {
 		await newPostMessage.save();
 		logging.info(NAMESPACE, "Post Created");
@@ -129,11 +129,15 @@ export const likePost = async (req: Request, res: Response) => {
 	try {
 		const post = await PostMessage.findById(id);
 		logging.info(NAMESPACE, `Post Found with the id ${id}`);
-		const index = post!.likes.findIndex((id) => id === userId);
-
+		// const index = post!.likes.findIndex((id) => id === userId);
+		const index = post!.likes.findIndex((_id) => _id === userId);
 		if (index === -1) {
 			logging.info(NAMESPACE, "User like the post");
 			post!.likes.push(userId);
+			console.log({ index, post, id });
+		} else {
+			post!.likes.splice(index, 1);
+			console.log({ index, post, id });
 		}
 
 		const updatedPost = await PostMessage.findByIdAndUpdate(id, post!, { new: true });
