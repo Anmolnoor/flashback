@@ -39,6 +39,10 @@
 }
 
 .post--info--tags {
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	justify-content: flex-start;
 	font-size: 1.2rem;
 	font-weight: 400;
 	color: #444;
