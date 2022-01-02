@@ -33,7 +33,9 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 		dispatch(SearchPost(search));
 	};
 
-	const postHandler = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+	const postHandler = async (
+		e: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
 		// console.log(postdata);
 		dispatch(CreatePost(postdata));
 	};
@@ -55,6 +57,7 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 							type='text'
 							id='title'
 							value={search.search}
+							placeholder='Search with text here'
 							onChange={(e) => setSearch({ ...search, search: e.target.value })}
 						/>
 					</div>
@@ -64,6 +67,7 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 							type='text'
 							id='title'
 							value={search.tags}
+							placeholder='Search with tags here'
 							onChange={(e) => setSearch({ ...search, tags: e.target.value })}
 						/>
 					</div>
@@ -86,8 +90,13 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 									type='text'
 									id='title'
 									value={postdata.title}
+									placeholder='Title'
 									onChange={(e) =>
-										setPostdata({ ...postdata, title: e.target.value, creator: String(user) })
+										setPostdata({
+											...postdata,
+											title: e.target.value,
+											creator: String(user)
+										})
 									}
 								/>
 							</div>
@@ -97,7 +106,10 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 									type='text'
 									id='message'
 									value={postdata.message}
-									onChange={(e) => setPostdata({ ...postdata, message: e.target.value })}
+									placeholder='Message'
+									onChange={(e) =>
+										setPostdata({ ...postdata, message: e.target.value })
+									}
 								/>
 							</div>
 							<div className='form-input'>
@@ -106,7 +118,13 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 									type='text'
 									id='tags'
 									value={postdata.tags}
-									onChange={(e) => setPostdata({ ...postdata, tags: e.target.value.split(",") })}
+									placeholder='Tags'
+									onChange={(e) =>
+										setPostdata({
+											...postdata,
+											tags: e.target.value.split(",")
+										})
+									}
 								/>
 							</div>
 							<div className='form-input'>
@@ -127,7 +145,8 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 					</div>
 				) : (
 					<div className='sidebar--login--notification'>
-						You must need to Login to Add your Memories or Like other's Flashbacks{" "}
+						You must need to Login to Add your Memories or Like other's
+						Flashbacks{" "}
 					</div>
 				)}
 			</div>

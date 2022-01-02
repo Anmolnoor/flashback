@@ -13,17 +13,33 @@ const postController = (req: Request, res: Response, next: NextFunction) => {
 	// next();
 };
 
-export const getPosts = async (req: Request, res: Response, next: NextFunction) => {
+export const getPosts = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	logging.info(NAMESPACE, "Get Posts route called");
 	const { page } = req.query;
 	try {
-		const LIMIT = 8;
+		const LIMIT = 6;
 		const startIndex = (Number(page) - 1) * LIMIT;
 		const totle = await PostMessage.countDocuments({});
 
-		const posts = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
-		logging.info(NAMESPACE, `Totle number of posts:${totle} and startIndex:${startIndex}`);
-		res.status(200).json({ data: posts, currentPage: Number(page), numberofPages: Math.ceil(totle / LIMIT) });
+		const posts = await PostMessage.find()
+			.sort({ _id: -1 })
+			.limit(LIMIT)
+			.skip(startIndex);
+		logging.info(
+			NAMESPACE,
+			`Totle number of posts:${totle} and startIndex:${startIndex}`
+		);
+		res
+			.status(200)
+			.json({
+				data: posts,
+				currentPage: Number(page),
+				numberofPages: Math.ceil(totle / LIMIT)
+			});
 	} catch (error) {
 		logging.error(NAMESPACE, "Error in getPosts", error);
 		res.status(404).json({ message: "Post Not Found" });
@@ -31,7 +47,11 @@ export const getPosts = async (req: Request, res: Response, next: NextFunction) 
 };
 // get post by searchQuery and tags
 
-export const getPostBySearch = async (req: Request, res: Response, next: NextFunction) => {
+export const getPostBySearch = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	logging.info(NAMESPACE, "Get Post By Search route called");
 
 	const { searchQuery, tags } = req.query;
@@ -39,7 +59,9 @@ export const getPostBySearch = async (req: Request, res: Response, next: NextFun
 		if (searchQuery && tags) {
 			const title = new RegExp(searchQuery, "i");
 
-			const posts = await PostMessage.find({ $or: [{ title }, { tags: { $in: tags.split(",") } }] });
+			const posts = await PostMessage.find({
+				$or: [{ title }, { tags: { $in: tags.split(",") } }]
+			});
 			logging.info(NAMESPACE, `Totle number of posts : ${posts.length}`);
 			res.status(200).json({ data: posts });
 		} else {
@@ -70,7 +92,10 @@ export const createPost = async (req: Request, res: Response) => {
 	logging.info(NAMESPACE, "Create Post route called");
 	const post = req.body;
 	logging.info(NAMESPACE, "Post to be created", req.body.title);
-	const newPostMessage = new PostMessage({ ...post, createdAt: new Date().toISOString() });
+	const newPostMessage = new PostMessage({
+		...post,
+		createdAt: new Date().toISOString()
+	});
 	try {
 		await newPostMessage.save();
 		logging.info(NAMESPACE, "Post Created");
@@ -93,7 +118,14 @@ export const updatePost = async (req: Request, res: Response) => {
 		return res.status(404).send(`No post with id: ${id}`);
 	}
 
-	const updatedPost = { creator, title, message, tags, selectedFile, updatedAt: new Date().toISOString() };
+	const updatedPost = {
+		creator,
+		title,
+		message,
+		tags,
+		selectedFile,
+		updatedAt: new Date().toISOString()
+	};
 	await PostMessage.findByIdAndUpdate(id, updatedPost, { new: true });
 	logging.info(NAMESPACE, `Post Updated with ID:${id}`);
 	res.json(updatedPost);
@@ -140,7 +172,9 @@ export const likePost = async (req: Request, res: Response) => {
 			console.log({ index, post, id });
 		}
 
-		const updatedPost = await PostMessage.findByIdAndUpdate(id, post!, { new: true });
+		const updatedPost = await PostMessage.findByIdAndUpdate(id, post!, {
+			new: true
+		});
 		logging.info(NAMESPACE, "Post Updated");
 		res.status(200).json(updatedPost);
 	} catch (error) {
@@ -149,4 +183,13 @@ export const likePost = async (req: Request, res: Response) => {
 	}
 };
 
-export default { postController, getPosts, getPost, createPost, updatePost, deletePost, likePost, getPostBySearch };
+export default {
+	postController,
+	getPosts,
+	getPost,
+	createPost,
+	updatePost,
+	deletePost,
+	likePost,
+	getPostBySearch
+};
