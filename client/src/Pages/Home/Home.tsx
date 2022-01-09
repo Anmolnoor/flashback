@@ -11,6 +11,7 @@ import { loadUser } from "../../Features/auth";
 
 // css imports
 import "./home.css";
+import swal from "sweetalert";
 
 interface post {
 	_id: string;
@@ -28,16 +29,19 @@ interface payloadinta {
 
 const Home: FC = () => {
 	const dispatch = useDispatch();
-	const [postdata, setPostdata] = useState({
-		title: "",
-		message: "",
-		tags: [""],
-		selectedFile: "",
-		creator: ""
-	});
+	// const [postdata, setPostdata] = useState({
+	// _id: "",
+	// title: "",
+	// message: "",
+	// tags: [""],
+	// selectedFile: "",
+	// creator: ""
+	// });
 
 	const state = useSelector((state: RootState) => state.post);
-	const loaderState = useSelector((state: RootState) => state.post.posts.loading);
+	const loaderState = useSelector(
+		(state: RootState) => state.post.posts.loading
+	);
 
 	const payload: payloadinta = {
 		user: JSON.parse(localStorage.getItem("user")!),
@@ -61,16 +65,25 @@ const Home: FC = () => {
 					<div className='home--content'>
 						{state.posts.data.length > 0 ? (
 							state.posts.data?.map((post, index) => (
-								<Postcard key={index} {...post} setPostdata={setPostdata} />
+								<Postcard
+									key={index}
+									{...post}
+									// setPostdata={setPostdata}
+								/>
 							))
 						) : (
-							<p>no post Loaded yet</p>
+							<>
+								<p>no post Loaded yet</p>
+							</>
 						)}
 					</div>
 				</div>
 			)}
 			<div className='home--sidebar'>
-				<Sidebar postdata={postdata} setPostdata={setPostdata} />
+				<Sidebar
+				//  postdata={postdata}
+				// setPostdata={setPostdata}
+				/>
 			</div>
 		</div>
 	);

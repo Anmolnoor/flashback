@@ -9,12 +9,13 @@ import "./postcard.css";
 import { Link } from "react-router-dom";
 import { FaEllipsisV, FaThumbsUp, FaTrash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { DeletePost, LikePost } from "../../Features/post";
+import { DeletePost, LikePost, setPostData } from "../../Features/post";
 import { RootState } from "../../Store/store";
 // import { useSelector } from "react-redux";
 // import { RootState } from "../../Store/store";
 
 interface postdata {
+	_id: string;
 	title: string;
 	message: string;
 	tags: string[];
@@ -23,14 +24,15 @@ interface postdata {
 }
 interface PostcardProps {
 	_id: string;
-	creator?: string;
+	creator: string;
 	createdAt: string;
 	tags: string[];
 	title: string;
-	message?: string;
+	message: string;
 	likes: string[];
-	selectedFile?: string;
-	setPostdata: React.Dispatch<React.SetStateAction<postdata>>;
+	selectedFile: string;
+	createdby: string;
+	// setPostdata: React.Dispatch<React.SetStateAction<postdata>>;
 }
 
 const Postcard: FC<PostcardProps> = ({
@@ -42,7 +44,8 @@ const Postcard: FC<PostcardProps> = ({
 	tags,
 	createdAt,
 	title,
-	setPostdata
+	createdby
+	// setPostdata
 }) => {
 	const userState = useSelector((state: RootState) => state.auth);
 
@@ -53,8 +56,30 @@ const Postcard: FC<PostcardProps> = ({
 	};
 
 	const optionHandler = () => {
-		console.log("clicked");
-		// setPostdata({ _id, likes, message , tags, title });
+		// console.log("clicked");
+		// console.log(selectedFile);
+
+		dispatch(
+			setPostData({
+				_id,
+				title,
+				message,
+				tags,
+				selectedFile,
+				creator,
+				createdAt,
+				createdby,
+				likes
+			})
+		);
+		// setPostdata({
+		// 	_id,
+		// 	title,
+		// 	message,
+		// 	tags,
+		// 	selectedFile,
+		// 	creator
+		// });
 	};
 
 	return (
@@ -95,11 +120,14 @@ const Postcard: FC<PostcardProps> = ({
 								}}
 								className='postcard--info--like'>
 								{/* <Like likes={likes} userId={userId} /> */}
-								{likes?.length ? likes?.length : ""} <FaThumbsUp size={24} color='#111' />
+								{likes?.length ? likes?.length : ""}{" "}
+								<FaThumbsUp size={24} color='#111' />
 							</div>
 						</div>
 						{creator === userState.user?.name ? (
-							<div onClick={deletePosthandler} className='postard--btn--delete postcard--btn'>
+							<div
+								onClick={deletePosthandler}
+								className='postard--btn--delete postcard--btn'>
 								<FaTrash size={24} color='#111' />
 							</div>
 						) : null}
