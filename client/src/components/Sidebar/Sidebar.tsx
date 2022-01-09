@@ -39,12 +39,25 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 		// console.log(postdata);
 		dispatch(CreatePost(postdata));
 	};
-
-	const pageHandler1 = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		dispatch(FetchPosts({ page: 1 }));
+	const getPageCompo = (i: number) => {
+		return (
+			<div className='sidebar--pagenation--text'>
+				<p
+					onClick={() => {
+						dispatch(FetchPosts({ page: i + 1 }));
+					}}>
+					{i + 1}
+				</p>
+			</div>
+		);
 	};
-	const pageHandler2 = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		dispatch(FetchPosts({ page: 2 }));
+
+	const getPageNumber = (pages: number) => {
+		let res: JSX.Element[] = [];
+		for (let i = 0; i < pages; i++) {
+			res[i] = getPageCompo(i);
+		}
+		return res;
 	};
 
 	return (
@@ -152,24 +165,7 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 			</div>
 			<div className='sideabar--pagenations sidebar--post--area'>
 				<div className='sidebar--pagenation'>
-					<div className='sidebar--pagenation--text'>
-						<p onClick={pageHandler1}>1</p>
-					</div>
-					{
-						pageState.posts.numberofPages > 1 ? (
-							<div className='sidebar--pagenation--text'>
-								<p onClick={pageHandler2}>2</p>
-							</div>
-						) : null
-						// <>
-						// 	<div className='sidebar--pagenation--text'>
-						// 		<p onClick={pageHandler}>2</p>
-						// 	</div>
-						// 	<div className='sidebar--pagenation--text'>
-						// 		<p onClick={pageHandler}>3</p>
-						// 	</div>
-						// </>
-					}
+					{getPageNumber(pageState.posts.numberofPages)}
 				</div>
 			</div>
 		</div>
