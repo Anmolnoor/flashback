@@ -33,16 +33,31 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 		dispatch(SearchPost(search));
 	};
 
-	const postHandler = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+	const postHandler = async (
+		e: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
 		// console.log(postdata);
 		dispatch(CreatePost(postdata));
 	};
-
-	const pageHandler1 = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		dispatch(FetchPosts({ page: 1 }));
+	const getPageCompo = (i: number) => {
+		return (
+			<div className='sidebar--pagenation--text'>
+				<p
+					onClick={() => {
+						dispatch(FetchPosts({ page: i + 1 }));
+					}}>
+					{i + 1}
+				</p>
+			</div>
+		);
 	};
-	const pageHandler2 = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-		dispatch(FetchPosts({ page: 2 }));
+
+	const getPageNumber = (pages: number) => {
+		let res: JSX.Element[] = [];
+		for (let i = 0; i < pages; i++) {
+			res[i] = getPageCompo(i);
+		}
+		return res;
 	};
 
 	return (
@@ -55,6 +70,7 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 							type='text'
 							id='title'
 							value={search.search}
+							placeholder='Search with text here'
 							onChange={(e) => setSearch({ ...search, search: e.target.value })}
 						/>
 					</div>
@@ -64,6 +80,7 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 							type='text'
 							id='title'
 							value={search.tags}
+							placeholder='Search with tags here'
 							onChange={(e) => setSearch({ ...search, tags: e.target.value })}
 						/>
 					</div>
@@ -86,8 +103,13 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 									type='text'
 									id='title'
 									value={postdata.title}
+									placeholder='Title'
 									onChange={(e) =>
-										setPostdata({ ...postdata, title: e.target.value, creator: String(user) })
+										setPostdata({
+											...postdata,
+											title: e.target.value,
+											creator: String(user)
+										})
 									}
 								/>
 							</div>
@@ -97,7 +119,10 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 									type='text'
 									id='message'
 									value={postdata.message}
-									onChange={(e) => setPostdata({ ...postdata, message: e.target.value })}
+									placeholder='Message'
+									onChange={(e) =>
+										setPostdata({ ...postdata, message: e.target.value })
+									}
 								/>
 							</div>
 							<div className='form-input'>
@@ -106,7 +131,13 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 									type='text'
 									id='tags'
 									value={postdata.tags}
-									onChange={(e) => setPostdata({ ...postdata, tags: e.target.value.split(",") })}
+									placeholder='Tags'
+									onChange={(e) =>
+										setPostdata({
+											...postdata,
+											tags: e.target.value.split(",")
+										})
+									}
 								/>
 							</div>
 							<div className='form-input'>
@@ -127,30 +158,14 @@ const Sidebar: FC<siderbarProps> = ({ postdata, setPostdata }) => {
 					</div>
 				) : (
 					<div className='sidebar--login--notification'>
-						You must need to Login to Add your Memories or Like other's Flashbacks{" "}
+						You must need to Login to Add your Memories or Like other's
+						Flashbacks{" "}
 					</div>
 				)}
 			</div>
 			<div className='sideabar--pagenations sidebar--post--area'>
 				<div className='sidebar--pagenation'>
-					<div className='sidebar--pagenation--text'>
-						<p onClick={pageHandler1}>1</p>
-					</div>
-					{
-						pageState.posts.numberofPages > 1 ? (
-							<div className='sidebar--pagenation--text'>
-								<p onClick={pageHandler2}>2</p>
-							</div>
-						) : null
-						// <>
-						// 	<div className='sidebar--pagenation--text'>
-						// 		<p onClick={pageHandler}>2</p>
-						// 	</div>
-						// 	<div className='sidebar--pagenation--text'>
-						// 		<p onClick={pageHandler}>3</p>
-						// 	</div>
-						// </>
-					}
+					{getPageNumber(pageState.posts.numberofPages)}
 				</div>
 			</div>
 		</div>

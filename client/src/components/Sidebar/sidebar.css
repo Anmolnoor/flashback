@@ -1,14 +1,18 @@
 .sidebar--container {
 	width: 400px;
 	display: flex;
-	gap: 30px;
+	gap: 12px;
 	flex-direction: column;
 }
 
 .sidebar--post--area {
-	box-shadow: 2px 2px 20px 0px #aaa;
+	/* box-shadow: 2px 2px 20px 0px #aaa; */
+	box-shadow: 4px 4px 3px 1px #aaa;
+
+	border: solid 1.7px #aaa;
 	padding: 5% 0;
 	width: 100%;
+	border-radius: 10px;
 }
 .sidebar--login--notification {
 	padding: 5%;
@@ -53,7 +57,7 @@
 	left: 15px;
 	width: fit-content;
 	z-index: 1;
-	font-size: 1.2rem;
+	font-size: 1rem;
 	color: #444;
 	background-color: #fff;
 	transition: all 0.3s ease;
@@ -71,7 +75,7 @@
 	border: #333 solid 1px;
 	border-radius: 5px;
 	outline: none;
-	font-size: 1.5rem;
+	font-size: 1rem;
 	color: #333;
 }
 /* 
@@ -81,7 +85,7 @@
 
 .form-input > input[type="file"]::-webkit-file-upload-button {
 	margin-left: -4%;
-	margin-top: 5px;
+	margin-top: 0px;
 	width: 0%;
 	height: 55px;
 	padding: 0.5rem;
@@ -91,7 +95,6 @@
 	background-color: #fff;
 	border: #fff solid 2px;
 	transition: all 0.3s ease-in-out;
-
 	content: "Upload";
 }
 

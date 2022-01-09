@@ -1,5 +1,5 @@
 .single--post--container {
-	margin: 2%;
+	margin: 1%;
 }
 
 .post--body {
@@ -11,31 +11,39 @@
 	width: 100%;
 }
 
+.post-image {
+	width: 100%;
+}
+
 .post--info {
-	margin-top: 3%;
-	padding-left: 3%;
+	margin-top: 1%;
+	padding-left: 1%;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
-	gap: 30px;
-}
-
-.post-image {
-	width: 100%;
+	gap: 10px;
 }
 
 .post--info--title {
-	font-size: 2.5rem;
+	font-size: 2rem;
 	font-weight: 600;
 }
 
 .post--info--creater {
 	margin-top: -10px;
-	font-size: 1.5rem;
+	margin-left: 20px;
+	font-size: 1.2rem;
 	font-weight: 400;
 	color: #333;
+}
+
+.post--info--time {
+	margin-top: -10px;
+	margin-left: 20px;
+	font-size: 1rem;
+	color: #444;
 }
 
 .post--info--tags {
@@ -43,14 +51,9 @@
 	flex-direction: row;
 	align-content: center;
 	justify-content: flex-start;
-	font-size: 1.2rem;
-	font-weight: 400;
-	color: #444;
-}
-
-.post--info--time {
 	font-size: 1rem;
-	color: #444;
+	font-weight: 400;
+	color: #555;
 }
 
 .post--info--message {
@@ -60,34 +63,92 @@
 }
 
 .post--info--btns {
-	cursor: pointer;
 	display: flex;
 	flex-direction: row;
 	margin: 5%;
-	justify-content: space-between;
+	justify-content: space-around;
 	align-items: flex-start;
-	gap: 10px;
+	gap: 160px;
 	width: 80%;
 }
 
 .post--info--like {
+	cursor: pointer;
+	box-shadow: 2px 3px 10px 0px #aaa;
+	border-radius: 10px;
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-start;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	width: 70%;
+	font-size: 1.8rem;
+}
+
+.post--info--delete {
+	cursor: pointer;
+	box-shadow: 2px 3px 10px 0px #aaa;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 	align-items: center;
 	gap: 10px;
 	width: 100%;
 	font-size: 1.8rem;
 }
 
-.post--info--delete {
+.post--info--comment {
 	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
-	align-items: center;
+	flex-direction: column-reverse;
 	gap: 10px;
+}
+
+.post--info--comment--title {
+	font-size: 1.4rem;
+	margin: 1%;
+}
+
+.post--info--comment--posted--obj {
+	border-radius: 10px;
+	box-shadow: 2px 3px 10px 0px #aaa;
+	display: flex;
+	flex-direction: column-reverse;
+	font-size: 1rem;
+	justify-content: center;
+	align-items: flex-start;
+}
+
+.post--info--comment--posted--owner {
+	font-weight: 600;
+	width: 97%;
+	margin: 1%;
+
+	text-align: end;
+}
+
+.post--info--comment--posted--comment {
+	color: #444;
+	margin: 1%;
+}
+
+.post--info--comment--post--textbox {
 	width: 100%;
-	font-size: 1.8rem;
+	border-radius: 10px;
+	padding: 1%;
+	height: 100px;
+}
+
+.post--info--comment--post--submitbtn {
+	border-radius: 10px;
+	cursor: pointer;
+	margin: 2%;
+	box-shadow: 3px 4px 10px 0px #aaa;
+	display: flex;
+	flex-direction: column;
+	font-size: 1.5rem;
+	justify-content: center;
+	align-items: center;
 }
 
 .related--posts--title {

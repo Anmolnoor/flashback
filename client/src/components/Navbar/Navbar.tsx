@@ -26,7 +26,7 @@ const Navbar: FC<NavbarProps> = () => {
 		<>
 			<div className='navbar-container'>
 				<NavLink to='/' className='navbar-logo'>
-					<img src={Logo} alt='logo' height='70px' />
+					<img src={Logo} alt='logo' height='50px' />
 				</NavLink>
 				<div className='navbar-links'>
 					{auth.isAuthenticated ? (
@@ -34,7 +34,10 @@ const Navbar: FC<NavbarProps> = () => {
 							<div className='navbar--profile'>{auth.user?.name.charAt(0)}</div>
 							<div className='navbar--profile--name'>{auth.user?.name}</div>
 							<div className='navbar--btn'>
-								<NavLink to='/logout' onClick={logoutHandler} className='signin--btn '>
+								<NavLink
+									to='/logout'
+									onClick={logoutHandler}
+									className='signin--btn '>
 									<p>LogOut</p>
 								</NavLink>
 							</div>
