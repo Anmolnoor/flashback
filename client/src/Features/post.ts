@@ -13,7 +13,6 @@ interface post {
 	selectedFile: string;
 	creator: string;
 	createdAt: string;
-	createdby: string;
 }
 
 interface postData {
@@ -52,7 +51,6 @@ const initialState: postState = {
 			selectedFile: "",
 			creator: "",
 			createdAt: "",
-			createdby: "",
 			likes: [""]
 		}
 	}
@@ -108,6 +106,8 @@ export const DeletePost = createAsyncThunk(
 export const UpdatePost = createAsyncThunk(
 	"patch/updatePost",
 	async (payload: postData, { rejectWithValue }) => {
+		console.log(payload);
+
 		try {
 			// axios post with jwt token
 			const token = localStorage.getItem("token");
@@ -235,7 +235,7 @@ export const SinglePost = createAsyncThunk(
 
 interface DataToPost {
 	name: string;
-	value: string;
+	value: string | string[];
 }
 
 const postSlice = createSlice({
@@ -250,7 +250,8 @@ const postSlice = createSlice({
 			state.posts.postData[action.payload.name] = action.payload.value;
 		},
 		updatePost: (state, action: PayloadAction<post>) => {
-			console.log({ "this is working": action.payload, state });
+			console.log(action.payload);
+
 			state.posts.data = [action.payload];
 		}
 	},
@@ -292,7 +293,6 @@ const postSlice = createSlice({
 				selectedFile: "",
 				creator: "",
 				createdAt: "",
-				createdby: "",
 				likes: [""]
 			};
 			// return action.payload;

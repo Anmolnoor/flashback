@@ -33,13 +33,11 @@ export const getPosts = async (
 			NAMESPACE,
 			`Totle number of posts:${totle} and startIndex:${startIndex}`
 		);
-		res
-			.status(200)
-			.json({
-				data: posts,
-				currentPage: Number(page),
-				numberofPages: Math.ceil(totle / LIMIT)
-			});
+		res.status(200).json({
+			data: posts,
+			currentPage: Number(page),
+			numberofPages: Math.ceil(totle / LIMIT)
+		});
 	} catch (error) {
 		logging.error(NAMESPACE, "Error in getPosts", error);
 		res.status(404).json({ message: "Post Not Found" });
@@ -90,11 +88,16 @@ export const getPost = async (req: Request, res: Response) => {
 
 export const createPost = async (req: Request, res: Response) => {
 	logging.info(NAMESPACE, "Create Post route called");
-	const post = req.body;
+	const { selectedFile, creator, message, title } = req.body;
 	logging.info(NAMESPACE, "Post to be created", req.body.title);
+	console.log(req.body);
+	const createdAt = new Date().toISOString();
 	const newPostMessage = new PostMessage({
-		...post,
-		createdAt: new Date().toISOString()
+		selectedFile,
+		creator,
+		message,
+		title,
+		createdAt
 	});
 	try {
 		await newPostMessage.save();

@@ -31,8 +31,6 @@ interface PostcardProps {
 	message: string;
 	likes: string[];
 	selectedFile: string;
-	createdby: string;
-	// setPostdata: React.Dispatch<React.SetStateAction<postdata>>;
 }
 
 const Postcard: FC<PostcardProps> = ({
@@ -43,9 +41,7 @@ const Postcard: FC<PostcardProps> = ({
 	selectedFile,
 	tags,
 	createdAt,
-	title,
-	createdby
-	// setPostdata
+	title
 }) => {
 	const userState = useSelector((state: RootState) => state.auth);
 
@@ -68,7 +64,6 @@ const Postcard: FC<PostcardProps> = ({
 				selectedFile,
 				creator,
 				createdAt,
-				createdby,
 				likes
 			})
 		);
