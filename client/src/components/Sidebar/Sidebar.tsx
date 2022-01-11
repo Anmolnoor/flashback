@@ -7,6 +7,7 @@ import {
 	FetchPosts,
 	SearchPost,
 	setDataToPost,
+	setPostData,
 	updatePost,
 	UpdatePost
 } from "../../Features/post";
@@ -25,14 +26,6 @@ interface siderbarProps {
 	// postdata: postdata;
 	// setPostdata: React.Dispatch<React.SetStateAction<postdata>>;
 }
-interface postData {
-	_id: string;
-	title: string;
-	message?: string;
-	tags?: string[];
-	selectedFile?: string;
-	creator: string;
-}
 
 const Sidebar: FC<siderbarProps> = () =>
 	// { postdata, setPostdata }
@@ -50,21 +43,7 @@ const Sidebar: FC<siderbarProps> = () =>
 			tags: ""
 		});
 
-		// const [postdata, setpostdata] = useState<postData>({
-		// 	_id: "",
-		// 	title: "",
-		// 	message: "",
-		// 	tags: [""],
-		// 	selectedFile: ""
-		// });
-
-		// if (postState !== postdata) {
-		// 	setpostdata(postState);
-		// 	console.log(postdata);
-		// }
-		// console.log({ postdata });
-
-		// const user = localStorage.getItem("name");
+		const user = localStorage.getItem("name");
 
 		const searchHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 			dispatch(SearchPost(search));
@@ -77,21 +56,21 @@ const Sidebar: FC<siderbarProps> = () =>
 			if (upload) {
 				dispatch(UpdatePost(postState));
 			} else {
+				dispatch(
+					setDataToPost({
+						name: "creator",
+						value: user!
+					})
+				);
+				dispatch(
+					setDataToPost({
+						name: "likes",
+						value: postState.likes
+					})
+				);
 				dispatch(CreatePost(postState));
 			}
 		};
-
-		// const clearHandler = () => {
-		// 	dispatch(
-		// 		setPostData({
-		// 			_id: "",
-		// 			title: "",
-		// 			message: "",
-		// 			tags: [""],
-		// 			selectedFile: ""
-		// 		})
-		// 	);
-		// };
 
 		const getPageCompo = (i: number) => {
 			return (
@@ -205,7 +184,7 @@ const Sidebar: FC<siderbarProps> = () =>
 											dispatch(
 												setDataToPost({
 													name: e.target.id,
-													value: e.target.value
+													value: e.target.value.split(",")
 												})
 											)
 										}
@@ -218,24 +197,27 @@ const Sidebar: FC<siderbarProps> = () =>
 										<FileBase
 											type='file'
 											multiple={false}
-											// onDone={({ base64 }: { base64: string }): void =>
-											// 	// setPostdata({ ...postdata, selectedFile: base64 })
-											// }
+											onDone={({ base64 }: { base64: string }): void => {
+												dispatch(
+													setDataToPost({
+														name: "selectedFile",
+														value: base64
+													})
+												);
+											}}
 										/>
 									</div>
 								)}
 								<div className='form-submit' onClick={postHandler}>
 									<p>Submit</p>
 								</div>
+								{/* <div
+									className='form-submit'
+									style={{ marginTop: "15px" }}
+									onClick={clearHandler}>
+									<p>clear</p>
+								</div> */}
 							</div>
-							{/* {upload ? (
-									<div
-										className='form-submit'
-										style={{ marginTop: "15px" }}
-										onClick={clearHandler}>
-										<p>clear</p>
-									</div>
-								) : null} */}
 						</div>
 					) : (
 						<div className='sidebar--login--notification'>

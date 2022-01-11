@@ -23,7 +23,6 @@ interface post {
 	selectedFile: string;
 	creator: string;
 	createdAt: string;
-	createdby: string;
 }
 
 const SinglePostT: FC = () => {

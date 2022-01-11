@@ -13,7 +13,6 @@ interface post {
 	selectedFile: string;
 	creator: string;
 	createdAt: string;
-	createdby: string;
 }
 
 interface postData {
@@ -21,6 +20,7 @@ interface postData {
 	title: string;
 	message?: string;
 	tags?: string[];
+	likes: string[];
 	selectedFile?: string;
 	creator?: string;
 }
@@ -52,7 +52,6 @@ const initialState: postState = {
 			selectedFile: "",
 			creator: "",
 			createdAt: "",
-			createdby: "",
 			likes: [""]
 		}
 	}
@@ -122,7 +121,7 @@ export const UpdatePost = createAsyncThunk(
 				config
 			);
 			if (res.status === 200) {
-				// console.log(res.data);
+				console.log(res.data);
 				return res.data;
 			}
 			return rejectWithValue(res.status);
@@ -235,7 +234,7 @@ export const SinglePost = createAsyncThunk(
 
 interface DataToPost {
 	name: string;
-	value: string;
+	value: string | string[];
 }
 
 const postSlice = createSlice({
@@ -250,7 +249,6 @@ const postSlice = createSlice({
 			state.posts.postData[action.payload.name] = action.payload.value;
 		},
 		updatePost: (state, action: PayloadAction<post>) => {
-			console.log({ "this is working": action.payload, state });
 			state.posts.data = [action.payload];
 		}
 	},
@@ -273,14 +271,6 @@ const postSlice = createSlice({
 			state.posts.loading = true;
 		},
 		[UpdatePost.fulfilled.type]: (state, action: PayloadAction<post>) => {
-			console.log({
-				"Update post ": action.payload
-			});
-			// state.posts.data = state.posts.data.map((post) => {
-			// 	if (post._id === action.payload._id) {
-			// 		action.payload;
-			// 	}
-			// });
 			postSlice.caseReducers.updatePost(state, action);
 			state.posts.loading = false;
 			state.posts.upload = false;
@@ -292,7 +282,6 @@ const postSlice = createSlice({
 				selectedFile: "",
 				creator: "",
 				createdAt: "",
-				createdby: "",
 				likes: [""]
 			};
 			// return action.payload;
