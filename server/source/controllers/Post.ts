@@ -114,7 +114,8 @@ export const updatePost = async (req: Request, res: Response) => {
 	const { id } = req.params;
 	logging.info(NAMESPACE, `Post ID:${id}`);
 
-	const { title, message, creator, selectedFile, tags } = req.body;
+	const { _id, likes, title, message, creator, selectedFile, tags } = req.body;
+	console.log(req.body);
 
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		logging.error(NAMESPACE, "Invalid ID", id);
@@ -122,6 +123,8 @@ export const updatePost = async (req: Request, res: Response) => {
 	}
 
 	const updatedPost = {
+		_id,
+		likes,
 		creator,
 		title,
 		message,

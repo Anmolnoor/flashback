@@ -14,14 +14,6 @@ import { RootState } from "../../Store/store";
 // import { useSelector } from "react-redux";
 // import { RootState } from "../../Store/store";
 
-interface postdata {
-	_id: string;
-	title: string;
-	message: string;
-	tags: string[];
-	selectedFile: string;
-	creator: string;
-}
 interface PostcardProps {
 	_id: string;
 	creator: string;
@@ -109,7 +101,7 @@ const Postcard: FC<PostcardProps> = ({
 						<div className='postard--btn--like postcard--btn'>
 							<div
 								onClick={() => {
-									// console.log("this is working");
+									// console.log("this is working", _id);
 
 									dispatch(LikePost({ postId: _id }));
 								}}

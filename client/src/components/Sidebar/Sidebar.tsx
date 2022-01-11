@@ -26,14 +26,6 @@ interface siderbarProps {
 	// postdata: postdata;
 	// setPostdata: React.Dispatch<React.SetStateAction<postdata>>;
 }
-interface postData {
-	_id: string;
-	title: string;
-	message?: string;
-	tags?: string[];
-	selectedFile?: string;
-	creator: string;
-}
 
 const Sidebar: FC<siderbarProps> = () =>
 	// { postdata, setPostdata }
@@ -68,6 +60,12 @@ const Sidebar: FC<siderbarProps> = () =>
 					setDataToPost({
 						name: "creator",
 						value: user!
+					})
+				);
+				dispatch(
+					setDataToPost({
+						name: "likes",
+						value: postState.likes
 					})
 				);
 				dispatch(CreatePost(postState));
