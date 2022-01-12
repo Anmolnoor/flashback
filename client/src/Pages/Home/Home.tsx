@@ -52,6 +52,7 @@ const Home: FC = () => {
 		dispatch(loadUser(payload));
 		dispatch(FetchPosts({ page: 1 }));
 	}, []);
+
 	return (
 		<div className='home--container'>
 			{loaderState ? (
