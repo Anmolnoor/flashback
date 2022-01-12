@@ -24,6 +24,16 @@ interface postData {
 	selectedFile?: string;
 	creator?: string;
 }
+interface comments {
+	_id: string;
+	userId: {
+		_id: string;
+		name: string;
+	};
+	postId: string;
+	comment: string;
+}
+
 interface Posts {
 	data: post[];
 	upload: boolean;
@@ -31,6 +41,7 @@ interface Posts {
 	currentPage: number;
 	numberofPages: number;
 	postData: post;
+	comments: comments[];
 }
 
 interface postState {
@@ -53,7 +64,18 @@ const initialState: postState = {
 			creator: "",
 			createdAt: "",
 			likes: [""]
-		}
+		},
+		comments: [
+			{
+				_id: "",
+				comment: "",
+				postId: "",
+				userId: {
+					_id: "",
+					name: ""
+				}
+			}
+		]
 	}
 };
 
@@ -222,13 +244,58 @@ export const SinglePost = createAsyncThunk(
 			const res = await axios.get(`http://localhost:1337/posts/${payload.id}`);
 
 			if (res.status === 200) {
-				console.log({ "Single post ": res.data });
 				return res.data;
 			}
 			return rejectWithValue(res.status);
 		} catch (error) {
 			console.log(error);
 		}
+	}
+);
+
+export const postComment = createAsyncThunk(
+	"post/comment",
+	async (payload: { comment: string; id: string }, { rejectWithValue }) => {
+		console.log(payload);
+		const token = localStorage.getItem("token");
+		const config = {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		};
+
+		const res = await axios.post(
+			`http://localhost:1337/posts/${payload.id}/comments`,
+			{ comment: payload.comment },
+			config
+		);
+		if (res.status === 201) {
+			console.log(res.data);
+			return res.data;
+		}
+		return rejectWithValue(res.data);
+	}
+);
+export const getComment = createAsyncThunk(
+	"get/comment",
+	async (payload: { id: string }, { rejectWithValue }) => {
+		const token = localStorage.getItem("token");
+		console.log("get comment loged ");
+
+		const config = {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		};
+
+		const res = await axios.get(
+			`http://localhost:1337/posts/${payload.id}/comments`,
+			config
+		);
+		if (res.status === 200) {
+			return res.data.comments;
+		}
+		return rejectWithValue(res.data);
 	}
 );
 
@@ -253,6 +320,34 @@ const postSlice = createSlice({
 		}
 	},
 	extraReducers: {
+		// postComment
+		[postComment.pending.type]: (state) => {
+			state.posts.loading = true;
+		},
+		[postComment.fulfilled.type]: (state, action: PayloadAction<comments>) => {
+			// console.log(action.payload);
+			state.posts.loading = false;
+			// state.posts.comments.push(action.payload);
+			getComment({ id: action.payload.postId });
+		},
+		[postComment.rejected.type]: (state, action: PayloadAction<number>) => {
+			state.posts.loading = false;
+			console.log(action.payload);
+		},
+		// getComment
+		[getComment.pending.type]: (state) => {
+			state.posts.loading = true;
+		},
+		[getComment.fulfilled.type]: (state, action: PayloadAction<[comments]>) => {
+			// console.log(action.payload);
+			state.posts.loading = false;
+			// console.log({ "thisis what i am looking for": action.payload });
+			state.posts.comments = action.payload;
+		},
+		[getComment.rejected.type]: (state, action: PayloadAction<number>) => {
+			state.posts.loading = false;
+			console.log(action);
+		},
 		[FetchPosts.pending.type]: (state) => {
 			state.posts.loading = true;
 		},
@@ -266,6 +361,7 @@ const postSlice = createSlice({
 		[FetchPosts.rejected.type]: (state, action: PayloadAction<number>) => {
 			state.posts.loading = false;
 		},
+
 		// UpdatePost
 		[UpdatePost.pending.type]: (state) => {
 			state.posts.loading = true;

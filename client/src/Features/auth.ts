@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface post {
+interface user {
 	_id: string;
 	title: string;
 	message: string;
@@ -11,7 +11,7 @@ interface post {
 	name: string;
 }
 interface loadUserint {
-	user: post;
+	user: user;
 	token: string;
 }
 
@@ -19,7 +19,7 @@ interface AuthState {
 	error: string | null;
 	loading: boolean;
 	isAuthenticated: boolean;
-	user: post | null;
+	user: user | null;
 	token: string | null;
 }
 
@@ -68,7 +68,9 @@ export const authSlice = createSlice({
 	initialState,
 	reducers: {
 		loadUser: (state, action: PayloadAction<loadUserint>) => {
-			action.payload.token ? (state.isAuthenticated = true) : (state.isAuthenticated = false);
+			action.payload.token
+				? (state.isAuthenticated = true)
+				: (state.isAuthenticated = false);
 			state.token = action.payload.token;
 			state.user = action.payload.user;
 		},
@@ -90,7 +92,10 @@ export const authSlice = createSlice({
 			state.user = null;
 			state.token = null;
 		},
-		[loginUser.fulfilled.type]: (state, action: PayloadAction<{ result: post; token: string }>) => {
+		[loginUser.fulfilled.type]: (
+			state,
+			action: PayloadAction<{ result: user; token: string }>
+		) => {
 			localStorage.setItem("token", action.payload.token);
 			localStorage.setItem("user", JSON.stringify(action.payload.result));
 			localStorage.setItem("name", String(action.payload.result.name));
@@ -100,7 +105,10 @@ export const authSlice = createSlice({
 			state.user = action.payload.result;
 			state.token = action.payload.token;
 		},
-		[loginUser.rejected.type]: (state, action: PayloadAction<{ error: string }>) => {
+		[loginUser.rejected.type]: (
+			state,
+			action: PayloadAction<{ error: string }>
+		) => {
 			console.log(action);
 			state.loading = false;
 			state.isAuthenticated = false;
@@ -113,7 +121,10 @@ export const authSlice = createSlice({
 			state.user = null;
 			state.token = null;
 		},
-		[registerUser.fulfilled.type]: (state, action: PayloadAction<{ result: post; token: string }>) => {
+		[registerUser.fulfilled.type]: (
+			state,
+			action: PayloadAction<{ result: user; token: string }>
+		) => {
 			localStorage.setItem("token", action.payload.token);
 			localStorage.setItem("user", JSON.stringify(action.payload.result));
 			state.loading = false;
@@ -121,7 +132,10 @@ export const authSlice = createSlice({
 			state.user = action.payload.result;
 			state.token = action.payload.token;
 		},
-		[registerUser.rejected.type]: (state, action: PayloadAction<{ error: string }>) => {
+		[registerUser.rejected.type]: (
+			state,
+			action: PayloadAction<{ error: string }>
+		) => {
 			state.loading = false;
 			console.log(action);
 			state.isAuthenticated = false;
