@@ -8,7 +8,7 @@ const router = express.Router();
 // router.route("/comments").get(Controller.getAllComment);
 router
 	.route("/:id/comments")
-	.get(Middleware.Auth, Controller.getComment)
+	.get(Controller.getComment)
 	.post(Middleware.Auth, Controller.postComment);
 
 export default router;

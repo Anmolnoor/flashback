@@ -74,7 +74,7 @@ const Home: FC = () => {
 							))
 						) : (
 							<>
-								<p>no post Loaded yet</p>
+								<p>No Post Found!!!</p>
 							</>
 						)}
 					</div>

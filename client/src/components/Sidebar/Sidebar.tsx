@@ -44,6 +44,9 @@ const Sidebar: FC<siderbarProps> = () =>
 		});
 
 		const user = localStorage.getItem("name");
+		// console.log("====================================");
+		// console.log(user);
+		// console.log("====================================");
 
 		const searchHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 			dispatch(SearchPost(search));
