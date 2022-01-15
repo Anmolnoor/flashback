@@ -76,7 +76,7 @@ const SinglePostT: FC = () => {
 		dispatch(loadUser(payload));
 		dispatch(getComment({ id: id! }));
 		dispatch(SinglePost({ id }));
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<div className='single--post--container'>
@@ -113,7 +113,7 @@ const SinglePostT: FC = () => {
 											dispatch(LikePost({ postId: data._id }));
 										}}
 										className='post--info--like'>
-										{data.likes?.length ? data.likes?.length : ""}{" "}
+										{data.likes?.length ? data.likes?.length : " "}{" "}
 										<FaThumbsUp size={24} color='#111' />
 									</div>
 									{data.creator === userState.user?.name ? (
@@ -126,7 +126,54 @@ const SinglePostT: FC = () => {
 									) : null}
 								</div>
 
+								<div className='post--info--comment--title'>Comments</div>
 								<div className='post--info--comment'>
+									<div className='post--info--comment--posted'>
+										{comments.map((el, index) => {
+											return (
+												<div className='post--info--comment--posted--obj'>
+													<div key={index}>
+														<div className='post--info--comment--posted--owner'>
+															{el.userId.name}
+														</div>
+														<div className='post--info--comment--posted--comment'>
+															{el.comment}
+														</div>
+													</div>
+												</div>
+											);
+										})}
+									</div>
+									<div className='post--info--comment--post'>
+										{/* <div className='post--info--comment--title'>
+											Write a comment
+										</div> */}
+										<textarea
+											// rows={2}
+											className='post--info--comment--post--textbox'
+											placeholder='Write your comment here'
+											onChange={(e) => setcomment(e.target.value)}
+											value={comment}
+										/>
+										<div
+											className='post--info--comment--post--submitbtn'
+											onClick={() => {
+												if (comment) {
+													dispatch(postComment({ comment, id: data._id }));
+												}
+
+												dispatch(getComment({ id: data._id }));
+											}}>
+											Comment
+										</div>
+									</div>
+								</div>
+							</>
+						) : (
+							<>
+								<div
+									className='post--info--comment'
+									style={{ marginTop: "50px" }}>
 									<div className='post--info--comment--posted'>
 										<div className='post--info--comment--title'>Comments</div>
 
@@ -145,31 +192,9 @@ const SinglePostT: FC = () => {
 											})}
 										</div>
 									</div>
-									<div className='post--info--comment--post'>
-										<div className='post--info--comment--title'>
-											Write a comment
-										</div>
-										<textarea
-											// rows={2}
-											className='post--info--comment--post--textbox'
-											placeholder='Write your comment here'
-											onChange={(e) => setcomment(e.target.value)}
-											value={comment}
-										/>
-										<div
-											className='post--info--comment--post--submitbtn'
-											onClick={() => {
-												if (comment) {
-													dispatch(postComment({ comment, id: data._id }));
-													dispatch(getComment({ id: data._id }));
-												}
-											}}>
-											Comment
-										</div>
-									</div>
 								</div>
 							</>
-						) : null}
+						)}
 					</div>
 					<div className='post--image'>
 						<img src={data.selectedFile} alt='post-memory-here' width='100%' />

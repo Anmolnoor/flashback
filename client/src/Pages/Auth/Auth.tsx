@@ -18,7 +18,9 @@ const Auth: FC = () => {
 	const [singInB, setSingIn] = useState(true);
 	const navigate = useNavigate();
 	// const [isAuth, setIsAuth] = useState(false);
-	const authState = useSelector((state: RootState) => state.auth.isAuthenticated);
+	const authState = useSelector(
+		(state: RootState) => state.auth.isAuthenticated
+	);
 	const [FormData, setFormData] = useState({
 		email: "",
 		password: ""
@@ -31,7 +33,9 @@ const Auth: FC = () => {
 		password: "",
 		confirmPassword: ""
 	});
-	const submitHandler = async (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+	const submitHandler = async (
+		e: React.MouseEvent<HTMLDivElement, MouseEvent>
+	) => {
 		e.preventDefault();
 		console.log("submit");
 		singInB ? dispatch(loginUser(FormData)) : dispatch(registerUser(FormDataS));
@@ -58,7 +62,7 @@ const Auth: FC = () => {
 				<div className='auth--form'>
 					<div className='auth--title'>
 						<FaSignInAlt className='auth--icon' size='40' />
-						<h1>{singInB ? "Sing in" : "Sing up"}</h1>
+						<h1>{singInB ? "Sign in" : "Sign up"}</h1>
 					</div>
 					<form>
 						<div className='auth--form-group'>
@@ -68,13 +72,15 @@ const Auth: FC = () => {
 								<Register FormDataS={FormDataS} setFormDataS={setFormDataS} />
 							)}
 							<div className='auth-submit' onClick={submitHandler}>
-								<p>{singInB ? "Sing in" : "Sing up"}</p>
+								<p>{singInB ? "Sign in" : "Sign up"}</p>
 							</div>
 						</div>
 					</form>
 					<div className='auth--signin--signup'>
 						<div onClick={() => setSingIn(!singInB)}>
-							{singInB ? "Don't Have Account Yet!!!" : "Already Have Account!!! "}
+							{singInB
+								? "Don't Have Account Yet!!!"
+								: "Already Have Account!!! "}
 						</div>
 					</div>
 				</div>
