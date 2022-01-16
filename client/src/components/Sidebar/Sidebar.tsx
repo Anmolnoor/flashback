@@ -7,8 +7,6 @@ import {
 	FetchPosts,
 	SearchPost,
 	setDataToPost,
-	setPostData,
-	updatePost,
 	UpdatePost
 } from "../../Features/post";
 import { RootState } from "../../Store/store";
@@ -44,9 +42,6 @@ const Sidebar: FC<siderbarProps> = () =>
 		});
 
 		const user = localStorage.getItem("name");
-		// console.log("====================================");
-		// console.log(user);
-		// console.log("====================================");
 
 		const searchHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
 			dispatch(SearchPost(search));
@@ -62,7 +57,7 @@ const Sidebar: FC<siderbarProps> = () =>
 				dispatch(
 					setDataToPost({
 						name: "creator",
-						value: user!
+						value: state.user?.name!
 					})
 				);
 				dispatch(
@@ -77,7 +72,7 @@ const Sidebar: FC<siderbarProps> = () =>
 
 		const getPageCompo = (i: number) => {
 			return (
-				<div className='sidebar--pagenation--text'>
+				<div key={i} className='sidebar--pagenation--text'>
 					<p
 						onClick={() => {
 							dispatch(FetchPosts({ page: i + 1 }));

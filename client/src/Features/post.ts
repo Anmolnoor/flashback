@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { stat } from "fs";
-import { stringify } from "querystring";
-import swal from "sweetalert";
 
 interface post {
 	_id: string;
@@ -106,22 +103,27 @@ interface deletepost {
 export const DeletePost = createAsyncThunk(
 	"post/deletePost",
 	async (payload: { id: string }, { rejectWithValue }) => {
-		const token = localStorage.getItem("token");
-		const config = {
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${token}`
-			}
-		};
-		const res = await axios.delete(
-			`http://localhost:1337/posts/${payload.id}`,
-			config
-		);
+		try {
+			const token = localStorage.getItem("token");
+			const config = {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`
+				}
+			};
+			const res = await axios.delete(
+				`http://localhost:1337/posts/${payload.id}`,
+				config
+			);
 
-		if (res.status === 200) {
-			return { _id: payload.id };
+			if (res.status === 200) {
+				return { _id: payload.id };
+			}
+			return rejectWithValue(res.status);
+		} catch (error: any) {
+			console.log(error);
+			return rejectWithValue(error.response.status);
 		}
-		return rejectWithValue(res.status);
 	}
 );
 // http://localhost:1337/posts/
@@ -147,10 +149,9 @@ export const UpdatePost = createAsyncThunk(
 				return res.data;
 			}
 			return rejectWithValue(res.status);
-		} catch (err) {
-			console.log(err);
-
-			// swal;
+		} catch (error: any) {
+			console.log(error);
+			return rejectWithValue(error.response.status);
 		}
 	}
 );
@@ -159,22 +160,28 @@ export const CreatePost = createAsyncThunk(
 	"post/createPost",
 	async (payload: postData, { rejectWithValue }) => {
 		// axios post with jwt token
-		const token = localStorage.getItem("token");
-		const config = {
-			headers: {
-				Authorization: `Bearer ${token}`
+		try {
+			const token = localStorage.getItem("token");
+			const config = {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			};
+
+			const res = await axios.post(
+				"http://localhost:1337/posts",
+				payload,
+				config
+			);
+
+			if (res.status === 201) {
+				console.log(res.data);
+				return res.data;
 			}
-		};
-		const res = await axios.post(
-			"http://localhost:1337/posts",
-			payload,
-			config
-		);
-		if (res.status === 201) {
-			console.log(res.data);
-			return res.data;
+		} catch (error: any) {
+			console.log(error);
+			return rejectWithValue(error.response.status);
 		}
-		return rejectWithValue(res.status);
 	}
 );
 
@@ -185,29 +192,33 @@ interface likePostInt {
 export const LikePost = createAsyncThunk(
 	"post/LikePost",
 	async (payload: likePostInt, { rejectWithValue }) => {
-		const token = localStorage.getItem("token");
-		const config = {
-			headers: {
-				Authorization: `Bearer ${token}`
+		try {
+			const token = localStorage.getItem("token");
+			const config = {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			};
+
+			const res = await axios.patch(
+				`http://localhost:1337/posts/likePost/${payload.postId}`,
+				payload,
+				config
+			);
+
+			// if (res.status === 403) {
+			// 	console.log({ "like post ": res.data });
+			// 	return res.data;
+			// }
+
+			if (res.status === 200) {
+				console.log({ "like post ": res.data });
+				return res.data;
 			}
-		};
-
-		const res = await axios.patch(
-			`http://localhost:1337/posts/likePost/${payload.postId}`,
-			payload,
-			config
-		);
-
-		// if (res.status === 403) {
-		// 	console.log({ "like post ": res.data });
-		// 	return res.data;
-		// }
-
-		if (res.status === 200) {
-			console.log({ "like post ": res.data });
-			return res.data;
+		} catch (error: any) {
+			console.log(error);
+			return rejectWithValue(error.response.status);
 		}
-		return rejectWithValue(res.status);
 	}
 );
 
@@ -256,24 +267,28 @@ export const SinglePost = createAsyncThunk(
 export const postComment = createAsyncThunk(
 	"post/comment",
 	async (payload: { comment: string; id: string }, { rejectWithValue }) => {
-		console.log(payload);
-		const token = localStorage.getItem("token");
-		const config = {
-			headers: {
-				Authorization: `Bearer ${token}`
-			}
-		};
+		try {
+			console.log(payload);
+			const token = localStorage.getItem("token");
+			const config = {
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			};
 
-		const res = await axios.post(
-			`http://localhost:1337/posts/${payload.id}/comments`,
-			{ comment: payload.comment },
-			config
-		);
-		if (res.status === 201) {
-			console.log(res.data);
-			return res.data;
+			const res = await axios.post(
+				`http://localhost:1337/posts/${payload.id}/comments`,
+				{ comment: payload.comment },
+				config
+			);
+			if (res.status === 201) {
+				console.log(res.data);
+				return res.data;
+			}
+		} catch (error: any) {
+			console.log(error);
+			return rejectWithValue(error.response.status);
 		}
-		return rejectWithValue(res.data);
 	}
 );
 export const getComment = createAsyncThunk(
@@ -396,7 +411,6 @@ const postSlice = createSlice({
 			state.posts.loading = false;
 		},
 		[CreatePost.rejected.type]: (state, action: PayloadAction<number>) => {
-			console.log(action.payload);
 			state.posts.loading = false;
 		},
 		[DeletePost.pending.type]: (state) => {},
