@@ -19,18 +19,8 @@ import "./singlepost.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../Store/store";
 import moment from "moment";
-import { loadUser } from "../../Features/auth";
-
-interface post {
-	_id: string;
-	title: string;
-	message: string;
-	tags: string[];
-	likes: string[];
-	selectedFile: string;
-	creator: string;
-	createdAt: string;
-}
+import { loadUser, logout } from "../../Features/auth";
+import Swal from "sweetalert2";
 
 interface user {
 	_id: string;
@@ -59,6 +49,7 @@ const SinglePostT: FC = () => {
 	const loaderState = useSelector(
 		(state: RootState) => state.post.posts.loading
 	);
+	const userStateError = useSelector((state: RootState) => state.auth.error);
 
 	const comments = useSelector((state: RootState) => state.post.posts.comments);
 
@@ -71,12 +62,15 @@ const SinglePostT: FC = () => {
 		user: JSON.parse(localStorage.getItem("user")!),
 		token: localStorage.getItem("token")!
 	};
-
+	if (userStateError === 403) {
+		dispatch(logout());
+		Swal.fire("Session Expired!!", "Please Login Again", "error");
+	}
 	useEffect(() => {
 		dispatch(loadUser(payload));
 		dispatch(getComment({ id: id! }));
 		dispatch(SinglePost({ id }));
-	}, [dispatch]);
+	}, [dispatch, postComment]);
 
 	return (
 		<div className='single--post--container'>
@@ -131,8 +125,10 @@ const SinglePostT: FC = () => {
 									<div className='post--info--comment--posted'>
 										{comments.map((el, index) => {
 											return (
-												<div className='post--info--comment--posted--obj'>
-													<div key={index}>
+												<div
+													key={index}
+													className='post--info--comment--posted--obj'>
+													<div>
 														<div className='post--info--comment--posted--owner'>
 															{el.userId.name}
 														</div>
@@ -160,9 +156,8 @@ const SinglePostT: FC = () => {
 											onClick={() => {
 												if (comment) {
 													dispatch(postComment({ comment, id: data._id }));
+													dispatch(getComment({ id: data._id }));
 												}
-
-												dispatch(getComment({ id: data._id }));
 											}}>
 											Comment
 										</div>
@@ -172,15 +167,18 @@ const SinglePostT: FC = () => {
 						) : (
 							<>
 								<div
-									className='post--info--comment'
-									style={{ marginTop: "50px" }}>
+									style={{ marginTop: "50px" }}
+									className='post--info--comment--title'>
+									Comments
+								</div>
+								<div className='post--info--comment'>
 									<div className='post--info--comment--posted'>
-										<div className='post--info--comment--title'>Comments</div>
-
-										<div className='post--info--comment--posted--obj'>
-											{comments.map((el, index) => {
-												return (
-													<div key={index}>
+										{comments.map((el, index) => {
+											return (
+												<div
+													key={index}
+													className='post--info--comment--posted--obj'>
+													<div>
 														<div className='post--info--comment--posted--owner'>
 															{el.userId.name}
 														</div>
@@ -188,9 +186,9 @@ const SinglePostT: FC = () => {
 															{el.comment}
 														</div>
 													</div>
-												);
-											})}
-										</div>
+												</div>
+											);
+										})}
 									</div>
 								</div>
 							</>

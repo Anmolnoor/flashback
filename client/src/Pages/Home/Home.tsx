@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // components imports
 
@@ -7,11 +7,11 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { RootState } from "../../Store/store";
 import Loader from "../../components/Loader/Loader";
 import { FetchPosts } from "../../Features/post";
-import { loadUser } from "../../Features/auth";
+import { loadUser, logout } from "../../Features/auth";
 
 // css imports
 import "./home.css";
-import swal from "sweetalert";
+import Swal from "sweetalert2";
 
 interface post {
 	_id: string;
@@ -39,6 +39,7 @@ const Home: FC = () => {
 	// });
 
 	const state = useSelector((state: RootState) => state.post);
+	const userState = useSelector((state: RootState) => state.auth.error);
 	const loaderState = useSelector(
 		(state: RootState) => state.post.posts.loading
 	);
@@ -48,6 +49,10 @@ const Home: FC = () => {
 		token: localStorage.getItem("token")!
 	};
 
+	if (userState === 403) {
+		dispatch(logout());
+		Swal.fire("Session Expired!!", "Please Login Again", "error");
+	}
 	useEffect(() => {
 		dispatch(loadUser(payload));
 		dispatch(FetchPosts({ page: 1 }));

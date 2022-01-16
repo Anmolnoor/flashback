@@ -1,6 +1,14 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+import {
+	CreatePost,
+	DeletePost,
+	LikePost,
+	postComment,
+	UpdatePost
+} from "./post";
+
 interface user {
 	_id: string;
 	title: string;
@@ -16,7 +24,7 @@ interface loadUserint {
 }
 
 interface AuthState {
-	error: string | null;
+	error: null | number;
 	loading: boolean;
 	isAuthenticated: boolean;
 	user: user | null;
@@ -86,6 +94,43 @@ export const authSlice = createSlice({
 		}
 	},
 	extraReducers: {
+		[CreatePost.rejected.type]: (state, action: PayloadAction<number>) => {
+			if (action.payload === 403) {
+				console.log(action.payload);
+				state.error = action.payload;
+			}
+		},
+		[UpdatePost.rejected.type]: (state, action: PayloadAction<number>) => {
+			if (action.payload === 403) {
+				console.log(action.payload);
+				state.error = action.payload;
+			}
+		},
+		[postComment.rejected.type]: (state, action: PayloadAction<number>) => {
+			if (action.payload === 403) {
+				console.log(action.payload);
+				state.error = action.payload;
+			}
+		},
+		[DeletePost.rejected.type]: (state, action: PayloadAction<number>) => {
+			if (action.payload === 403) {
+				console.log(action.payload);
+				state.error = action.payload;
+			}
+		},
+		[postComment.rejected.type]: (state, action: PayloadAction<number>) => {
+			if (action.payload === 403) {
+				console.log(action.payload);
+				state.error = action.payload;
+			}
+		},
+
+		[LikePost.rejected.type]: (state, action: PayloadAction<number>) => {
+			if (action.payload === 403) {
+				console.log(action.payload);
+				state.error = action.payload;
+			}
+		},
 		[loginUser.pending.type]: (state) => {
 			state.loading = true;
 			state.isAuthenticated = false;
@@ -103,6 +148,7 @@ export const authSlice = createSlice({
 			state.loading = false;
 			state.isAuthenticated = true;
 			state.user = action.payload.result;
+			state.error = null;
 			state.token = action.payload.token;
 		},
 		[loginUser.rejected.type]: (

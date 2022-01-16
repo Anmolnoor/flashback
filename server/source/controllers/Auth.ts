@@ -16,7 +16,11 @@ const authController = (req: Request, res: Response, next: NextFunction) => {
 	// next();
 };
 
-export const signinController = async (req: Request, res: Response, next: NextFunction) => {
+export const signinController = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	logging.info(NAMESPACE, "Sign in route Called");
 
 	const { email, password } = req.body;
@@ -24,13 +28,22 @@ export const signinController = async (req: Request, res: Response, next: NextFu
 	try {
 		const existingUser = await User.findOne({ email });
 
-		if (!existingUser) return res.status(404).json({ message: "User does not exist." });
+		if (!existingUser)
+			return res.status(404).json({ message: "User does not exist." });
 
-		const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
+		const isPasswordCorrect = await bcrypt.compare(
+			password,
+			existingUser.password
+		);
 
-		if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid Credentials." });
+		if (!isPasswordCorrect)
+			return res.status(400).json({ message: "Invalid Credentials." });
 
-		const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, "secretkey", { expiresIn: "1H" });
+		const token = jwt.sign(
+			{ email: existingUser.email, id: existingUser._id },
+			"secretkey",
+			{ expiresIn: "1H" }
+		);
 
 		res.status(200).json({ result: existingUser, token });
 	} catch (error) {
@@ -39,22 +52,42 @@ export const signinController = async (req: Request, res: Response, next: NextFu
 	}
 };
 
-export const signupController = async (req: Request, res: Response, next: NextFunction) => {
+export const signupController = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	logging.info(NAMESPACE, "Sign up route Called");
 	const { email, password, confirmPassword, firstname, lastname } = req.body;
-	logging.info(NAMESPACE, "Sing up Details", { email, password, confirmPassword, firstname, lastname });
+	logging.info(NAMESPACE, "Sing up Details", {
+		email,
+		password,
+		confirmPassword,
+		firstname,
+		lastname
+	});
 	try {
 		const existingUser = await User.findOne({ email });
 
-		if (existingUser) return res.status(400).json({ message: "User already exist!!!" });
+		if (existingUser)
+			return res.status(400).json({ message: "User already exist!!!" });
 
-		if (password !== confirmPassword) return res.status(400).json({ message: "Passwords don't match!!!" });
+		if (password !== confirmPassword)
+			return res.status(400).json({ message: "Passwords don't match!!!" });
 
 		const hashedPassword = await bcrypt.hash(password, 12);
 
-		const result = await User.create({ email, password: hashedPassword, name: `${firstname} ${lastname}` });
+		const result = await User.create({
+			email,
+			password: hashedPassword,
+			name: `${firstname} ${lastname}`
+		});
 		console.log(result);
-		const token = jwt.sign({ email: result.email, id: result._id }, "secretkey", { expiresIn: "1H" });
+		const token = jwt.sign(
+			{ email: result.email, id: result._id },
+			"secretkey",
+			{ expiresIn: "1H" }
+		);
 
 		res.status(200).json({ result, token });
 	} catch (error) {
